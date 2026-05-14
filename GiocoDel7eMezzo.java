@@ -11,13 +11,15 @@ public class SetteEMezzo {
         if (carta >= 8) {
             return 0.5;
         } else {
-            return 
-              
+            return carta;
+        }
+    }
+
     public static void stampaCarta(double carta) {
         if (carta == 0.5) {
             System.out.println("Hai pescato una figura (0.5)");
         } else {
-            System.out.println("Hai pescato: " + (int)carta);
+            System.out.println("Hai pescato: " + (int) carta);
         }
     }
 
@@ -44,6 +46,7 @@ public class SetteEMezzo {
 
             if (punteggioGiocatore > 7.5) {
                 System.out.println("Hai sballato! Hai perso.");
+                input.close();
                 return;
             }
 
@@ -64,24 +67,23 @@ public class SetteEMezzo {
 
             punteggioBanco += cartaBanco;
 
-            System.out.println("Punteggio 
+            System.out.println("Punteggio banco: " + punteggioBanco);
+        }
+
         if (punteggioBanco > 7.5) {
             System.out.println("Il banco ha sballato! Hai vinto!");
         }
-        
-            System.out.println("\n=== RISULTATO FINALE ===");
-            System.out.println("Tuo punteggio: " + punteggioGiocatore);
-            System.out.println("Punteggio banco: " + punteggioBanco);
 
-            if (punteggioGiocatore > punteggioBanco) {
-                System.out.println("Hai vinto!");
-            }
-            else if (punteggioGiocatore < punteggioBanco) {
-                System.out.println("Ha vinto il banco!");
-            }
-            else {
-                System.out.println("Pareggio!");
-            }
+        System.out.println("\n=== RISULTATO FINALE ===");
+        System.out.println("Tuo punteggio: " + punteggioGiocatore);
+        System.out.println("Punteggio banco: " + punteggioBanco);
+
+        if (punteggioGiocatore > punteggioBanco || punteggioBanco > 7.5) {
+            System.out.println("Hai vinto!");
+        } else if (punteggioGiocatore < punteggioBanco) {
+            System.out.println("Ha vinto il banco!");
+        } else {
+            System.out.println("Pareggio!");
         }
 
         input.close();
