@@ -1,91 +1,221 @@
-import java.util.Random;
-import java.util.Scanner;
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sette e Mezzo</title>
 
-public class SetteEMezzo {
+<style>
 
-    public static double pescaCarta() {
-        Random rand = new Random();
+body{
+    margin:0;
+    font-family: Arial, sans-serif;
+    background: #0b4d1b;
+    color:white;
+    text-align:center;
+}
 
-        int carta = rand.nextInt(10) + 1;
+h1{
+    margin-top:20px;
+    font-size:40px;
+}
 
-        if (carta >= 8) {
-            return 0.5;
-        } else {
-            return carta;
-        }
+#tavolo{
+    margin:30px auto;
+    width:80%;
+    background:#146b2e;
+    border:5px solid #d4af37;
+    border-radius:20px;
+    padding:30px;
+    box-shadow:0 0 20px black;
+}
+
+.area{
+    margin:20px 0;
+}
+
+.carte{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    margin-top:15px;
+}
+
+.carta{
+    width:70px;
+    height:100px;
+    background:white;
+    color:black;
+    border-radius:10px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:28px;
+    font-weight:bold;
+    box-shadow:0 0 10px black;
+}
+
+button{
+    padding:12px 25px;
+    margin:10px;
+    border:none;
+    border-radius:10px;
+    font-size:18px;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+button:hover{
+    transform:scale(1.05);
+}
+
+#pesca{
+    background:#28a745;
+    color:white;
+}
+
+#stai{
+    background:#dc3545;
+    color:white;
+}
+
+#messaggio{
+    margin-top:20px;
+    font-size:24px;
+    font-weight:bold;
+}
+
+</style>
+</head>
+
+<body>
+
+<h1> Sette e Mezzo </h1>
+
+<div id="tavolo">
+
+    <div class="area">
+        <h2>Giocatore</h2>
+        <p>Punteggio: <span id="puntiGiocatore">0</span></p>
+
+        <div class="carte" id="carteGiocatore"></div>
+    </div>
+
+    <div class="area">
+        <h2>Banco</h2>
+        <p>Punteggio: <span id="puntiBanco">0</span></p>
+
+        <div class="carte" id="carteBanco"></div>
+    </div>
+
+    <button id="pesca" onclick="pescaCarta()">
+        Pesca Carta
+    </button>
+
+    <button id="stai" onclick="turnoBanco()">
+        Stai
+    </button>
+
+    <div id="messaggio"></div>
+
+</div>
+
+<script>
+
+let puntiGiocatore = 0;
+let puntiBanco = 0;
+
+function generaCarta(){
+
+    let numero = Math.floor(Math.random() * 10) + 1;
+
+    if(numero >= 8){
+        return 0.5;
     }
 
-    public static void stampaCarta(double carta) {
-        if (carta == 0.5) {
-            System.out.println("Hai pescato una figura (0.5)");
-        } else {
-            System.out.println("Hai pescato: " + (int) carta);
-        }
+    return numero;
+}
+
+function mostraCarta(id, valore){
+
+    let carta = document.createElement("div");
+    carta.classList.add("carta");
+
+    if(valore == 0.5){
+        carta.innerHTML = "F";
+    }else{
+        carta.innerHTML = valore;
     }
 
-    public static void main(String[] args) {
+    document.getElementById(id).appendChild(carta);
+}
 
-        Scanner input = new Scanner(System.in);
+function pescaCarta(){
 
-        double punteggioGiocatore = 0;
-        double punteggioBanco = 0;
+    let carta = generaCarta();
 
-        String scelta;
+    puntiGiocatore += carta;
 
-        System.out.println("=== GIOCO DEL 7 E MEZZO ===");
+    mostraCarta("carteGiocatore", carta);
 
-        do {
+    document.getElementById("puntiGiocatore").innerHTML =
+        puntiGiocatore;
 
-            double carta = pescaCarta();
+    if(puntiGiocatore > 7.5){
 
-            stampaCarta(carta);
+        document.getElementById("messaggio").innerHTML =
+            "Hai sballato! Hai perso!";
 
-            punteggioGiocatore += carta;
-
-            System.out.println("Punteggio attuale: " + punteggioGiocatore);
-
-            if (punteggioGiocatore > 7.5) {
-                System.out.println("Hai sballato! Hai perso.");
-                input.close();
-                return;
-            }
-
-            System.out.println("Vuoi pescare un'altra carta? (si/no)");
-            scelta = input.nextLine();
-
-        } while (scelta.equalsIgnoreCase("si"));
-
-        System.out.println("\n--- Turno del banco ---");
-
-        while (punteggioBanco < 5) {
-
-            double cartaBanco = pescaCarta();
-
-            System.out.print("Il banco ");
-
-            stampaCarta(cartaBanco);
-
-            punteggioBanco += cartaBanco;
-
-            System.out.println("Punteggio banco: " + punteggioBanco);
-        }
-
-        if (punteggioBanco > 7.5) {
-            System.out.println("Il banco ha sballato! Hai vinto!");
-        }
-
-        System.out.println("\n=== RISULTATO FINALE ===");
-        System.out.println("Tuo punteggio: " + punteggioGiocatore);
-        System.out.println("Punteggio banco: " + punteggioBanco);
-
-        if (punteggioGiocatore > punteggioBanco || punteggioBanco > 7.5) {
-            System.out.println("Hai vinto!");
-        } else if (punteggioGiocatore < punteggioBanco) {
-            System.out.println("Ha vinto il banco!");
-        } else {
-            System.out.println("Pareggio!");
-        }
-
-        input.close();
+        disattivaBottoni();
     }
 }
+
+function turnoBanco(){
+
+    while(puntiBanco < 5){
+
+        let carta = generaCarta();
+
+        puntiBanco += carta;
+
+        mostraCarta("carteBanco", carta);
+    }
+
+    document.getElementById("puntiBanco").innerHTML =
+        puntiBanco;
+
+    controllaVincitore();
+}
+
+function controllaVincitore(){
+
+    let messaggio = "";
+
+    if(puntiBanco > 7.5){
+        messaggio = "Il banco ha sballato! Hai vinto!";
+    }
+    else if(puntiGiocatore > puntiBanco){
+        messaggio = "Hai vinto!";
+    }
+    else if(puntiGiocatore < puntiBanco){
+        messaggio = "Ha vinto il banco!";
+    }
+    else{
+        messaggio = "Pareggio!";
+    }
+
+    document.getElementById("messaggio").innerHTML = messaggio;
+
+    disattivaBottoni();
+}
+
+function disattivaBottoni(){
+
+    document.getElementById("pesca").disabled = true;
+    document.getElementById("stai").disabled = true;
+}
+
+</script>
+
+</body>
+</html>
